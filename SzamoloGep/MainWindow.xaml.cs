@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -35,7 +35,7 @@ namespace SzamoloGep
                 {"1", "2", "3", "-" },
                 {"C", "0", "=", "+" }
             };
-            for (int i = 0; i < 4;i++)
+            for (int i = 0; i < 4; i++)
             {
                 for (int j = 0; j < 4; j++)
                 {
@@ -72,12 +72,62 @@ namespace SzamoloGep
             }
         }
 
+
+        private double elsoSzam = 0;
+        private string muvelet = "";
+        private bool ujSzam = true;
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-           Button button = (Button)sender;
+            Button button = (Button)sender;
             string felirat = button.Content.ToString();
-            tb_kijelzo.Text = felirat;
+            if (char.IsDigit(felirat[0]))
+            {
+                if (ujSzam)
+                {
+                    tb_kijelzo.Text = felirat;
+                    ujSzam = false;
+                }
+                else
+                {
+                    tb_kijelzo.Text += felirat;
+                }
+            }
+            else if (felirat == "C")
+            {
+                tb_kijelzo.Text = "0";
+                elsoSzam = 0;
+                muvelet = "";
+                ujSzam = true;
+            }
+            else if (felirat == "=")
+            {
+                double masodikSzam = double.Parse(tb_kijelzo.Text);
+                double eredmeny = 0;
+                switch (muvelet)
+                {
+                    case "+":
+                        eredmeny = elsoSzam + masodikSzam;
+                        break;
+                    case "-":
+                        eredmeny = elsoSzam - masodikSzam;
+                        break;
+                    case "*":
+                        eredmeny = elsoSzam * masodikSzam;
+                        break;
+                    case "/":
+                        eredmeny = elsoSzam / masodikSzam;
+                        break;
+                }
+                tb_kijelzo.Text = eredmeny.ToString();
+                ujSzam = true;
+            }
+            else
+            {
+                elsoSzam = double.Parse(tb_kijelzo.Text);
+                muvelet = felirat;
+                ujSzam = true;
+            }
         }
-
     }
 }
